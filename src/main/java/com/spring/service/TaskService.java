@@ -50,7 +50,7 @@ public class TaskService {
     }
 
 
-    @CacheEvict(key = "#root.methodName", value = "findAllTasks")
+    @CacheEvict(key = "#root.methodName", value = "findAllTasks", allEntries = true)
     public Task update(Task task, String id) throws IOException {
         if (task == null)
             throw new RecordNotFoundException("Task is null");
@@ -63,7 +63,7 @@ public class TaskService {
         return taskRepo.save(task);
     }
 
-    @CacheEvict(key = "#root.methodName", value = "findAllTasks")
+    @CacheEvict(key = "#root.methodName", value = "findAllTasks", allEntries = true)
     public String deleteById(String id) throws IOException {
         if (taskRepo.findById(id).isPresent()) {
             taskRepo.deleteById(id);
@@ -76,7 +76,7 @@ public class TaskService {
         return taskRepo.findByIsOffline(offline);
     }
 
-    @CacheEvict(key = "#root.methodName", value = "findAllTasks")
+    @CacheEvict(key = "#root.methodName", value = "findAllTasks", allEntries = true)
     public String syncOffline() throws IOException {
         for (Task task : findByIsOffline(true)) {
             try {

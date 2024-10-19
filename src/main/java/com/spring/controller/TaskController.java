@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.List;
 
 @RestController
@@ -21,7 +20,7 @@ public class TaskController {
 
     @PostMapping("/task")
     @ResponseStatus(HttpStatus.CREATED)
-    public Task create(@RequestBody Task task) throws GeneralSecurityException, IOException {
+    public Task create(@RequestBody Task task) throws  IOException {
         return taskService.create(task);
     }
 

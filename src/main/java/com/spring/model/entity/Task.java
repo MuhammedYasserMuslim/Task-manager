@@ -1,7 +1,6 @@
 package com.spring.model.entity;
 
 
-import com.google.api.client.util.DateTime;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +11,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -21,6 +21,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EntityListeners({AuditingEntityListener.class})
 public class Task implements Serializable {
+
 
     @Id
     private String id;
@@ -46,17 +47,17 @@ public class Task implements Serializable {
     private String kind;
 
     @Column(name = "start")
-    private DateTime start;
+    private LocalDateTime start;
     @Column(name = "end")
-    private DateTime end;
+    private LocalDateTime end;
 
     @Column(name = "created")
     @CreatedDate
-    private DateTime created;
+    private LocalDateTime created;
 
     @Column(name = "updated")
     @LastModifiedDate
-    private DateTime updated;
+    private LocalDateTime updated;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Creator creator;

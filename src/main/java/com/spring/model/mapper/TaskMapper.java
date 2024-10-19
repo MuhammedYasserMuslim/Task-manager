@@ -1,5 +1,6 @@
 package com.spring.model.mapper;
 
+import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.spring.model.entity.Creator;
@@ -7,7 +8,12 @@ import com.spring.model.entity.Organizer;
 import com.spring.model.entity.Task;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -26,10 +32,10 @@ public class TaskMapper {
                 .htmlLink(event.getHtmlLink())
                 .iCalUID(event.getICalUID())
                 .kind(event.getKind())
-                .start(event.getStart().getDateTime())
-                .end(event.getEnd().getDateTime())
-                .created(event.getCreated())
-                .updated(event.getUpdated())
+                .start(mapToLocalDateTime(event.getStart().getDateTime()))
+                .end(mapToLocalDateTime(event.getEnd().getDateTime()))
+                .created(mapToLocalDateTime(event.getCreated()))
+                .updated(mapToLocalDateTime(event.getUpdated()))
                 .creator(mapCreatorToEvent(event.getCreator()))
                 .organizer(mapOrganizerToEvent(event.getOrganizer()))
                 .useDefault(event.getReminders().getUseDefault())
@@ -56,10 +62,8 @@ public class TaskMapper {
                 .setHtmlLink(task.getHtmlLink())
                 .setICalUID(task.getICalUID())
                 .setKind(task.getKind())
-                .setStart(new EventDateTime().setDateTime(task.getStart()))
-                .setEnd(new EventDateTime().setDateTime(task.getEnd()))
-                .setCreated(task.getCreated())
-                .setUpdated(task.getUpdated())
+                .setStart(new EventDateTime().setDateTime(mapToDateTime(task.getStart())))
+                .setEnd(new EventDateTime().setDateTime(mapToDateTime(task.getEnd())))
                 .setCreator(mapCreatorToEvent(task.getCreator()))
                 .setOrganizer(mapOrganizerToEvent(task.getOrganizer()))
                 .setReminders(new Event.Reminders().setUseDefault(task.isUseDefault()));
@@ -91,6 +95,19 @@ public class TaskMapper {
         c.setEmail(creator.getEmail());
         c.setSelf(creator.isSelf());
         return c;
+    }
+
+    public LocalDateTime mapToLocalDateTime(DateTime dateTime){
+        Date date = new Date(dateTime.getValue());
+        Instant instant = date.toInstant();
+        return instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+    }
+    public DateTime mapToDateTime(LocalDateTime localDateTime){
+        ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
+        Date date = Date.from(zonedDateTime.toInstant());
+        return new DateTime(date);
+
     }
 
 
