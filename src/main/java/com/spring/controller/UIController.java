@@ -64,5 +64,12 @@ public class UIController {
         return "redirect:/";
     }
 
+    @GetMapping("sync")
+    public String sync() throws IOException {
+        taskService.syncOffline();
+        return "redirect:/";
+
+    }
+
 
 }
